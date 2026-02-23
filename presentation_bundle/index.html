@@ -536,7 +536,7 @@
     <section class="panel" aria-live="polite">
       <div class="meta-row">
         <span id="meta">Slide 0</span>
-        <span class="badge">The Agentic Revolution</span>
+        <span class="badge">Our AI Journey is NOW</span>
       </div>
       <h1 class="headline" id="headline"></h1>
       <div class="divider"></div>
@@ -553,6 +553,7 @@
       <div class="layer" id="heroB"></div>
       <div class="hero-video" id="heroVideoWrap">
         <video id="heroVideo" preload="auto" autoplay muted loop playsinline>
+          <source src="https://grhcxws5ggt34hmf.public.blob.vercel-storage.com/nocc/slide0-hq.mp4" type="video/mp4" />
           <source src="slide0.mp4" type="video/mp4" />
         </video>
       </div>
@@ -1108,8 +1109,8 @@
       ui.heroVideoWrap.addEventListener("click", async () => {
         if (isVideoSlide(current)) {
           if (!introAudioUnlocked || ui.heroVideo.muted) {
-            const unlocked = await unlockIntroAudio();
-            if (unlocked) return;
+            await unlockIntroAudio();
+            return;
           }
           goto(1, 1);
         }
