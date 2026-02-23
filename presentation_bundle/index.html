@@ -1100,18 +1100,50 @@
     }
 
     function bindParallax() {
-      ui.deck.addEventListener("pointermove", (event) => {
+      ui.hero.addEventListener("pointermove", (event) => {
         if (isVideoSlide(current)) return;
+        if (event.pointerType === "touch") return;
         const layer = activeHero === "A" ? ui.heroA : ui.heroB;
-        const xRatio = (event.clientX / window.innerWidth - 0.5) * 2;
-        const yRatio = (event.clientY / window.innerHeight - 0.5) * 2;
-        const x = -xRatio * 3;
-        const y = -yRatio * 2;
+        const rect = ui.hero.getBoundingClientRect();
+        const localX = (event.clientX - rect.left) / rect.width;
+        const localY = (event.clientY - rect.top) / rect.height;
+        const xRatio = (localX - 0.5) * 2;
+        const yRatio = (localY - 0.5) * 2;
+        const x = -xRatio * 5;
+        const y = -yRatio * 3.5;
+        const originX = Math.max(0, Math.min(100, localX * 100));
+        const originY = Math.max(0, Math.min(100, localY * 100));
 
         if (window.gsap) {
-          gsap.to(layer, { x, y, duration: 0.6, ease: "power2.out" });
+          gsap.to(layer, {
+            x,
+            y,
+            scale: 1.04,
+            transformOrigin: `${originX}% ${originY}%`,
+            duration: 0.34,
+            ease: "power2.out"
+          });
         } else {
-          layer.style.transform = `translate(${x}px, ${y}px) scale(1)`;
+          layer.style.transformOrigin = `${originX}% ${originY}%`;
+          layer.style.transform = `translate(${x}px, ${y}px) scale(1.04)`;
+        }
+      });
+
+      ui.hero.addEventListener("pointerleave", () => {
+        if (isVideoSlide(current)) return;
+        const layer = activeHero === "A" ? ui.heroA : ui.heroB;
+        if (window.gsap) {
+          gsap.to(layer, {
+            x: 0,
+            y: 0,
+            scale: 1,
+            transformOrigin: "50% 50%",
+            duration: 0.42,
+            ease: "power2.out"
+          });
+        } else {
+          layer.style.transformOrigin = "50% 50%";
+          layer.style.transform = "translate(0px, 0px) scale(1)";
         }
       });
     }
